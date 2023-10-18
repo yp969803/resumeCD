@@ -1,0 +1,52 @@
+# This is a basic workflow to help ypu get started with Actions
+name: CI 
+# Controls when the workflow will run
+on: 
+ # Triggers the workflow on push or pull request events but only for master branch
+ push: 
+   branches: [master]
+ pull_request: 
+   branches: [master]
+ 
+ #Allow you to run this workflow manually from the actions tab workflow_dispatch;
+
+ workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
+jobs:
+  # This workflow contains a single job called "build"
+  build: 
+    # The type of runner that the job will run on
+    runs-on: ubuntu-22.04
+
+    # Steps represent a sequence of tasks that eill be executed as part of the jobs
+    steps:
+      - uses: actions/checkout@v2 
+      
+        name: Loginn to DOcker Hub
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ENV.secrets.DOCKER_HUB_USERNAME}}
+          password: ${{ENV.secrets.DOCKER_HUB_ACCESS_TOKEN}}
+      - 
+        name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1 
+
+      - 
+        name: Build and push 
+        uses: docker/build-push-action@v2 
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true 
+          tags: ${{ENV.secrets.DOCKER_HUB_USERNAME}}/resume:latest
+
+      
+      
+
+
+    #  Steps represent a sequence of tasks that will be executed as part of the job
+
+    # Steps reperesent a sequence of tasks that will be executed as part of job
+   
